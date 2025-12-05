@@ -32,7 +32,7 @@ const NEON_COLORS = {
   blue: 'hsl(190, 100%, 50%)',
   purple: 'hsl(270, 91%, 65%)',
   pink: 'hsl(330, 90%, 60%)',
-  cyan: 'hsl(185, 94%, 48%)',
+  cyan: 'hsl(67, 94%, 48%)',
   lime: 'hsl(150, 100%, 50%)',
 };
 
@@ -204,14 +204,14 @@ const AnalyticsDashboard = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Team Runs Trend */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-primary mb-4">Team Runs Trend</h3>
+            <h3 className="font-display text-lg font-bold mb-4"style={{ color: NEON_COLORS.cyan }}>Team Runs Trend</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={teamRunsTrend}>
                   <defs>
                     <linearGradient id="runsGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={NEON_COLORS.blue} stopOpacity={0.3} />
-                      <stop offset="95%" stopColor={NEON_COLORS.blue} stopOpacity={0} />
+                      <stop offset="5%" stopColor={NEON_COLORS.cyan} stopOpacity={0.3} />
+                      <stop offset="95%" stopColor={NEON_COLORS.cyan} stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(230 30% 20%)" />
@@ -227,7 +227,7 @@ const AnalyticsDashboard = () => {
                   <Area
                     type="monotone"
                     dataKey="runs"
-                    stroke={NEON_COLORS.blue}
+                    stroke={NEON_COLORS.cyan}
                     strokeWidth={2}
                     fill="url(#runsGradient)"
                   />
@@ -336,25 +336,25 @@ const AnalyticsDashboard = () => {
                   <Radar
                     name="Team"
                     dataKey="value"
-                    stroke={NEON_COLORS.cyan}
-                    fill={NEON_COLORS.cyan}
+                    stroke={NEON_COLORS.blue}
+                    fill={NEON_COLORS.blue}
                     fillOpacity={0.3}
-                    dot={{ fill: NEON_COLORS.cyan, r: 4 }}
+                    dot={{ fill: NEON_COLORS.blue, r: 4 }}
                     activeDot={{ 
                       r: 8, 
-                      fill: NEON_COLORS.cyan,
-                      style: { filter: `drop-shadow(0 0 8px ${NEON_COLORS.cyan})` }
+                      fill: NEON_COLORS.blue,
+                      style: { filter: `drop-shadow(0 0 8px ${NEON_COLORS.blue})` }
                     }}
                   />
                   <Tooltip
                     contentStyle={{
                       background: 'hsl(230 50% 6%)',
-                      border: `1px solid ${NEON_COLORS.cyan}40`,
+                      border: `1px solid ${NEON_COLORS.blue}40`,
                       borderRadius: '8px',
                       color: 'hsl(210 40% 98%)',
                     }}
                     labelStyle={{ color: 'hsl(210 40% 98%)' }}
-                    itemStyle={{ color: NEON_COLORS.cyan }}
+                    itemStyle={{ color: NEON_COLORS.blue }}
                   />
                 </RadarChart>
               </ResponsiveContainer>
@@ -363,7 +363,7 @@ const AnalyticsDashboard = () => {
 
           {/* Top Contributor Chart */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-neon-lime mb-4">Top Contributors</h3>
+            <h3 className="font-display text-lg font-bold text-neon-cyan mb-4">Top Contributors</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={contributionData} layout="vertical">
@@ -378,7 +378,7 @@ const AnalyticsDashboard = () => {
                     }}
                   />
                   <Bar dataKey="runs" fill={NEON_COLORS.blue} stackId="a" />
-                  <Bar dataKey="wickets" fill={NEON_COLORS.purple} stackId="a" />
+                  <Bar dataKey="wickets" fill={NEON_COLORS.pink} stackId="a" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
