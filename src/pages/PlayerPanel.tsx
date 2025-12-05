@@ -36,7 +36,7 @@ const NEON_COLORS = {
   blue: 'hsl(190, 100%, 50%)',
   purple: 'hsl(270, 91%, 65%)',
   pink: 'hsl(330, 90%, 60%)',
-  cyan: 'hsl(185, 94%, 48%)',
+  cyan: 'hsl(67, 94%, 48%)',
   lime: 'hsl(150, 100%, 50%)',
 };
 
@@ -152,7 +152,7 @@ const PlayerPanel = () => {
             <div className="flex gap-6">
               <NeonCircularProgress value={currentPlayer.fitnessScore} color="cyan" label="Fitness" />
               <NeonCircularProgress value={currentPlayer.fieldingRating} color="purple" label="Fielding" />
-              <NeonCircularProgress value={Math.min(currentPlayer.battingAverage * 1.5, 100)} color="blue" label="Form" />
+              <NeonCircularProgress value={Math.min(currentPlayer.battingAverage * 1.5, 100)} color="pink" label="Form" />
             </div>
           </div>
         </div>
