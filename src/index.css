@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -130,13 +130,94 @@
     background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.1));
     border: 1px solid hsl(var(--primary) / 0.5);
     box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neon-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.4), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .neon-button:hover::before {
+    left: 100%;
   }
 
   .neon-button:hover {
     background: linear-gradient(135deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.2));
     box-shadow: 0 0 30px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.3);
     transform: translateY(-2px);
+  }
+
+  .neon-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.4);
+  }
+
+  /* Neon Button Variants */
+  .neon-button-cyan {
+    @apply relative overflow-hidden px-6 py-3 font-display font-semibold tracking-wider uppercase rounded-lg;
+    background: linear-gradient(135deg, hsl(185 94% 48% / 0.2), hsl(185 94% 48% / 0.1));
+    border: 1px solid hsl(185 94% 48% / 0.5);
+    box-shadow: 0 0 20px hsl(185 94% 48% / 0.3);
+    color: hsl(185 94% 48%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neon-button-cyan:hover {
+    background: linear-gradient(135deg, hsl(185 94% 48% / 0.4), hsl(185 94% 48% / 0.2));
+    box-shadow: 0 0 30px hsl(185 94% 48% / 0.5), 0 0 60px hsl(185 94% 48% / 0.3), inset 0 0 20px hsl(185 94% 48% / 0.1);
+    transform: translateY(-3px);
+    border-color: hsl(185 94% 48% / 0.8);
+  }
+
+  .neon-button-cyan:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .neon-button-purple {
+    @apply relative overflow-hidden px-6 py-3 font-display font-semibold tracking-wider uppercase rounded-lg;
+    background: linear-gradient(135deg, hsl(270 91% 65% / 0.2), hsl(270 91% 65% / 0.1));
+    border: 1px solid hsl(270 91% 65% / 0.5);
+    box-shadow: 0 0 20px hsl(270 91% 65% / 0.3);
+    color: hsl(270 91% 65%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neon-button-purple:hover {
+    background: linear-gradient(135deg, hsl(270 91% 65% / 0.4), hsl(270 91% 65% / 0.2));
+    box-shadow: 0 0 30px hsl(270 91% 65% / 0.5), 0 0 60px hsl(270 91% 65% / 0.3), inset 0 0 20px hsl(270 91% 65% / 0.1);
+    transform: translateY(-3px);
+    border-color: hsl(270 91% 65% / 0.8);
+  }
+
+  .neon-button-purple:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .neon-button-pink {
+    @apply relative overflow-hidden px-6 py-3 font-display font-semibold tracking-wider uppercase rounded-lg;
+    background: linear-gradient(135deg, hsl(330 90% 60% / 0.2), hsl(330 90% 60% / 0.1));
+    border: 1px solid hsl(330 90% 60% / 0.5);
+    box-shadow: 0 0 20px hsl(330 90% 60% / 0.3);
+    color: hsl(330 90% 60%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neon-button-pink:hover {
+    background: linear-gradient(135deg, hsl(330 90% 60% / 0.4), hsl(330 90% 60% / 0.2));
+    box-shadow: 0 0 30px hsl(330 90% 60% / 0.5), 0 0 60px hsl(330 90% 60% / 0.3), inset 0 0 20px hsl(330 90% 60% / 0.1);
+    transform: translateY(-3px);
+    border-color: hsl(330 90% 60% / 0.8);
+  }
+
+  .neon-button-pink:active {
+    transform: translateY(0) scale(0.98);
   }
 
   .neon-input {
@@ -211,6 +292,47 @@
     animation: glow 2s ease-in-out infinite alternate;
   }
 
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  .animate-neon-flicker {
+    animation: neon-flicker 3s ease-in-out infinite;
+  }
+
+  .animate-border-glow {
+    animation: border-glow 2s ease-in-out infinite alternate;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px hsl(var(--primary) / 0.2);
+  }
+
+  .hover-glow-cyan:hover {
+    box-shadow: 0 0 25px hsl(185 94% 48% / 0.4), 0 0 50px hsl(185 94% 48% / 0.2);
+  }
+
+  .hover-glow-purple:hover {
+    box-shadow: 0 0 25px hsl(270 91% 65% / 0.4), 0 0 50px hsl(270 91% 65% / 0.2);
+  }
+
+  .hover-glow-pink:hover {
+    box-shadow: 0 0 25px hsl(330 90% 60% / 0.4), 0 0 50px hsl(330 90% 60% / 0.2);
+  }
+
+  .click-scale {
+    @apply transition-transform duration-150;
+  }
+
+  .click-scale:active {
+    transform: scale(0.95);
+  }
+
   @keyframes pulse-neon {
     0%, 100% {
       opacity: 1;
@@ -240,6 +362,40 @@
     }
   }
 
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes neon-flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+      text-shadow: 
+        0 0 10px currentColor,
+        0 0 20px currentColor,
+        0 0 40px currentColor;
+    }
+    20%, 24%, 55% {
+      opacity: 0.8;
+      text-shadow: none;
+    }
+  }
+
+  @keyframes border-glow {
+    from {
+      border-color: hsl(var(--primary) / 0.3);
+      box-shadow: 0 0 10px hsl(var(--primary) / 0.2);
+    }
+    to {
+      border-color: hsl(var(--primary) / 0.7);
+      box-shadow: 0 0 30px hsl(var(--primary) / 0.4), 0 0 60px hsl(var(--primary) / 0.2);
+    }
+  }
+
   @keyframes scan-line {
     0% {
       transform: translateY(-100%);
@@ -260,5 +416,66 @@
     animation: scan-line 8s linear infinite;
     pointer-events: none;
     z-index: 1000;
+  }
+
+  /* Interactive element effects */
+  .interactive-card {
+    @apply transition-all duration-300 cursor-pointer;
+  }
+
+  .interactive-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 
+      0 20px 40px hsl(var(--primary) / 0.15),
+      0 0 30px hsl(var(--primary) / 0.1);
+  }
+
+  .interactive-card:active {
+    transform: translateY(-2px) scale(0.99);
+  }
+
+  /* Neon underline effect */
+  .neon-underline {
+    position: relative;
+  }
+
+  .neon-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)));
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+    transition: width 0.3s ease;
+  }
+
+  .neon-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Ripple effect */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .ripple:active::after {
+    width: 300px;
+    height: 300px;
   }
 }

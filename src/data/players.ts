@@ -1,8 +1,60 @@
+export interface Achievement {
+  title: string;
+  description: string;
+  date: string;
+  type: 'milestone' | 'award' | 'record';
+}
+
+export interface CareerMilestone {
+  runs?: number;
+  wickets?: number;
+  catches?: number;
+  centuries?: number;
+  fifties?: number;
+  fiveWicketHauls?: number;
+}
+
+// Advanced Pro-Level Metrics
+export interface AdvancedBattingMetrics {
+  ballsFaced?: number;
+  dotBallsPlayed?: number;
+  boundaryBalls?: number; // Balls on which boundaries were scored
+  runsInPressure?: number; // Runs in pressure situations (last 5 overs, chasing)
+  ballsInPressure?: number;
+  powerplayRuns?: number;
+  middleOversRuns?: number;
+  deathOversRuns?: number;
+}
+
+export interface AdvancedBowlingMetrics {
+  ballsBowled?: number;
+  dotBallsBowled?: number;
+  deathOversBowled?: number; // Overs 16-20
+  deathOversRuns?: number;
+  powerplayWickets?: number;
+  middleOversWickets?: number;
+  deathOversWickets?: number;
+  matchTurningWickets?: number; // Key wickets at crucial moments
+  boundariesConceded?: number;
+}
+
+export interface AdvancedFieldingMetrics {
+  catchAttempts?: number;
+  catchesTaken?: number;
+  runOutAttempts?: number;
+  directHits?: number;
+  runsSaved?: number; // Estimated runs saved through fielding
+  groundFieldingActions?: number;
+  misfields?: number;
+  stumpings?: number;
+}
+
 export interface Player {
   id: string;
   name: string;
   role: 'Batsman' | 'Bowler' | 'All-Rounder' | 'Wicket-Keeper';
   avatar: string;
+  image?: string; // Player photo URL
   battingAverage: number;
   strikeRate: number;
   totalRuns: number;
@@ -16,6 +68,24 @@ export interface Player {
   matchesPlayed: number;
   runsPerMatch: number[];
   wicketsPerMatch: number[];
+  // Extended fields
+  age?: number;
+  battingStyle?: 'Right-hand' | 'Left-hand';
+  bowlingStyle?: string;
+  nationality?: string;
+  isCaptain?: boolean;
+  isViceCaptain?: boolean;
+  debutYear?: number;
+  achievements?: Achievement[];
+  milestones?: CareerMilestone;
+  highestScore?: number;
+  bestBowling?: string;
+  centuries?: number;
+  halfCenturies?: number;
+  // Pro-Level Advanced Metrics
+  advancedBatting?: AdvancedBattingMetrics;
+  advancedBowling?: AdvancedBowlingMetrics;
+  advancedFielding?: AdvancedFieldingMetrics;
 }
 
 export const initialPlayers: Player[] = [
@@ -24,6 +94,7 @@ export const initialPlayers: Player[] = [
     name: 'Virat Kohli',
     role: 'Batsman',
     avatar: 'VK',
+    image: '/images/players/virat-kohli.jpg',
     battingAverage: 58.2,
     strikeRate: 138.5,
     totalRuns: 12500,
@@ -37,12 +108,58 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 280,
     runsPerMatch: [45, 82, 0, 112, 67, 34, 89, 23, 156, 71],
     wicketsPerMatch: [0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    age: 35,
+    battingStyle: 'Right-hand',
+    bowlingStyle: 'Right-arm medium',
+    nationality: 'India',
+    isCaptain: false,
+    debutYear: 2008,
+    highestScore: 183,
+    centuries: 46,
+    halfCenturies: 65,
+    achievements: [
+      { title: 'ICC ODI Player of the Year', description: 'Best ODI player', date: '2018', type: 'award' },
+      { title: '10000 ODI Runs', description: 'Fastest to 10000 runs in ODIs', date: '2018', type: 'milestone' },
+      { title: 'Most Centuries in T20Is', description: 'Record for most T20I centuries', date: '2022', type: 'record' },
+    ],
+    milestones: { runs: 12500, centuries: 46, fifties: 65, catches: 125 },
+    advancedBatting: {
+      ballsFaced: 9020,
+      dotBallsPlayed: 2800,
+      boundaryBalls: 1135,
+      runsInPressure: 3200,
+      ballsInPressure: 2100,
+      powerplayRuns: 2800,
+      middleOversRuns: 5500,
+      deathOversRuns: 4200,
+    },
+    advancedBowling: {
+      ballsBowled: 120,
+      dotBallsBowled: 35,
+      deathOversBowled: 0,
+      deathOversRuns: 0,
+      powerplayWickets: 1,
+      middleOversWickets: 2,
+      deathOversWickets: 1,
+      matchTurningWickets: 0,
+      boundariesConceded: 18,
+    },
+    advancedFielding: {
+      catchAttempts: 142,
+      catchesTaken: 125,
+      runOutAttempts: 35,
+      directHits: 18,
+      runsSaved: 280,
+      groundFieldingActions: 450,
+      misfields: 12,
+    },
   },
   {
     id: '2',
     name: 'Rohit Sharma',
     role: 'Batsman',
     avatar: 'RS',
+    image: '/images/players/rohit-sharma.jpg',
     battingAverage: 48.9,
     strikeRate: 142.3,
     totalRuns: 10800,
@@ -56,18 +173,69 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 250,
     runsPerMatch: [78, 45, 122, 34, 89, 0, 67, 145, 23, 98],
     wicketsPerMatch: [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    age: 37,
+    battingStyle: 'Right-hand',
+    bowlingStyle: 'Right-arm off break',
+    nationality: 'India',
+    isCaptain: true,
+    debutYear: 2007,
+    highestScore: 264,
+    centuries: 31,
+    halfCenturies: 55,
+    achievements: [
+      { title: 'ODI Double Century x3', description: 'Only player with 3 ODI double centuries', date: '2017', type: 'record' },
+      { title: 'T20 World Cup Winner', description: 'Led India to T20 WC victory', date: '2024', type: 'award' },
+    ],
+    milestones: { runs: 10800, centuries: 31, fifties: 55, catches: 98 },
+    advancedBatting: {
+      ballsFaced: 7590,
+      dotBallsPlayed: 2100,
+      boundaryBalls: 1230,
+      runsInPressure: 2400,
+      ballsInPressure: 1800,
+      powerplayRuns: 4200,
+      middleOversRuns: 3800,
+      deathOversRuns: 2800,
+    },
+    advancedBowling: {
+      ballsBowled: 180,
+      dotBallsBowled: 55,
+      deathOversBowled: 5,
+      deathOversRuns: 48,
+      powerplayWickets: 3,
+      middleOversWickets: 4,
+      deathOversWickets: 1,
+      matchTurningWickets: 2,
+      boundariesConceded: 22,
+    },
+    advancedFielding: {
+      catchAttempts: 115,
+      catchesTaken: 98,
+      runOutAttempts: 22,
+      directHits: 8,
+      runsSaved: 180,
+      groundFieldingActions: 320,
+      misfields: 18,
+    },
   },
   {
     id: '3',
     name: 'Jasprit Bumrah',
     role: 'Bowler',
     avatar: 'JB',
+    image: '/images/players/jasprit-bumrah.jpg',
     battingAverage: 8.2,
     strikeRate: 85.4,
     totalRuns: 420,
     fours: 35,
     sixes: 12,
     bowlingEconomy: 4.2,
+    age: 30,
+    battingStyle: 'Right-hand',
+    bowlingStyle: 'Right-arm fast',
+    nationality: 'India',
+    debutYear: 2016,
+    bestBowling: '6/19',
     wickets: 320,
     catches: 45,
     fitnessScore: 92,
@@ -75,12 +243,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 180,
     runsPerMatch: [5, 12, 0, 8, 2, 15, 0, 6, 3, 10],
     wicketsPerMatch: [3, 4, 2, 5, 1, 3, 4, 2, 3, 4],
+    advancedBatting: {
+      ballsFaced: 510,
+      dotBallsPlayed: 320,
+      boundaryBalls: 47,
+      runsInPressure: 85,
+      ballsInPressure: 120,
+      powerplayRuns: 50,
+      middleOversRuns: 180,
+      deathOversRuns: 190,
+    },
+    advancedBowling: {
+      ballsBowled: 4320,
+      dotBallsBowled: 2450,
+      deathOversBowled: 280,
+      deathOversRuns: 1820,
+      powerplayWickets: 85,
+      middleOversWickets: 120,
+      deathOversWickets: 115,
+      matchTurningWickets: 48,
+      boundariesConceded: 380,
+    },
+    advancedFielding: {
+      catchAttempts: 52,
+      catchesTaken: 45,
+      runOutAttempts: 18,
+      directHits: 5,
+      runsSaved: 120,
+      groundFieldingActions: 180,
+      misfields: 8,
+    },
   },
   {
     id: '4',
     name: 'Ravindra Jadeja',
     role: 'All-Rounder',
     avatar: 'RJ',
+    image: '/images/players/ravindra-jadeja.jpg',
     battingAverage: 35.6,
     strikeRate: 125.8,
     totalRuns: 5200,
@@ -94,12 +293,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 200,
     runsPerMatch: [34, 56, 23, 78, 45, 12, 67, 89, 0, 45],
     wicketsPerMatch: [2, 1, 3, 2, 1, 4, 2, 0, 3, 2],
+    advancedBatting: {
+      ballsFaced: 4150,
+      dotBallsPlayed: 1245,
+      boundaryBalls: 475,
+      runsInPressure: 1560,
+      ballsInPressure: 1400,
+      powerplayRuns: 680,
+      middleOversRuns: 2850,
+      deathOversRuns: 1670,
+    },
+    advancedBowling: {
+      ballsBowled: 6200,
+      dotBallsBowled: 2480,
+      deathOversBowled: 185,
+      deathOversRuns: 1480,
+      powerplayWickets: 45,
+      middleOversWickets: 158,
+      deathOversWickets: 42,
+      matchTurningWickets: 38,
+      boundariesConceded: 420,
+    },
+    advancedFielding: {
+      catchAttempts: 165,
+      catchesTaken: 156,
+      runOutAttempts: 85,
+      directHits: 42,
+      runsSaved: 380,
+      groundFieldingActions: 520,
+      misfields: 12,
+    },
   },
   {
     id: '5',
     name: 'KL Rahul',
     role: 'Wicket-Keeper',
     avatar: 'KL',
+    image: '/images/players/kl-rahul.jpg',
     battingAverage: 45.3,
     strikeRate: 135.2,
     totalRuns: 6800,
@@ -113,12 +343,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 170,
     runsPerMatch: [56, 89, 34, 112, 0, 78, 45, 67, 23, 98],
     wicketsPerMatch: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    advancedBatting: {
+      ballsFaced: 5050,
+      dotBallsPlayed: 1515,
+      boundaryBalls: 665,
+      runsInPressure: 2040,
+      ballsInPressure: 1800,
+      powerplayRuns: 2180,
+      middleOversRuns: 2720,
+      deathOversRuns: 1900,
+    },
+    advancedBowling: {
+      ballsBowled: 0,
+      dotBallsBowled: 0,
+      deathOversBowled: 0,
+      deathOversRuns: 0,
+      powerplayWickets: 0,
+      middleOversWickets: 0,
+      deathOversWickets: 0,
+      matchTurningWickets: 0,
+      boundariesConceded: 0,
+    },
+    advancedFielding: {
+      catchAttempts: 195,
+      catchesTaken: 180,
+      runOutAttempts: 38,
+      directHits: 15,
+      runsSaved: 220,
+      groundFieldingActions: 280,
+      misfields: 8,
+    },
   },
   {
     id: '6',
     name: 'Hardik Pandya',
     role: 'All-Rounder',
     avatar: 'HP',
+    image: '/images/players/hardik-pandya.jpg',
     battingAverage: 32.4,
     strikeRate: 148.9,
     totalRuns: 3800,
@@ -132,12 +393,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 150,
     runsPerMatch: [23, 67, 45, 0, 89, 34, 112, 5, 78, 56],
     wicketsPerMatch: [1, 2, 0, 3, 1, 2, 0, 1, 2, 1],
+    advancedBatting: {
+      ballsFaced: 2560,
+      dotBallsPlayed: 640,
+      boundaryBalls: 465,
+      runsInPressure: 1140,
+      ballsInPressure: 920,
+      powerplayRuns: 420,
+      middleOversRuns: 1380,
+      deathOversRuns: 2000,
+    },
+    advancedBowling: {
+      ballsBowled: 2150,
+      dotBallsBowled: 645,
+      deathOversBowled: 180,
+      deathOversRuns: 1620,
+      powerplayWickets: 18,
+      middleOversWickets: 35,
+      deathOversWickets: 32,
+      matchTurningWickets: 12,
+      boundariesConceded: 285,
+    },
+    advancedFielding: {
+      catchAttempts: 72,
+      catchesTaken: 65,
+      runOutAttempts: 22,
+      directHits: 8,
+      runsSaved: 95,
+      groundFieldingActions: 180,
+      misfields: 12,
+    },
   },
   {
     id: '7',
     name: 'Mohammed Shami',
     role: 'Bowler',
     avatar: 'MS',
+    image: '/images/players/mohammed-shami.jpg',
     battingAverage: 12.5,
     strikeRate: 95.2,
     totalRuns: 580,
@@ -151,12 +443,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 160,
     runsPerMatch: [8, 15, 2, 0, 12, 5, 18, 3, 6, 10],
     wicketsPerMatch: [2, 3, 4, 2, 5, 1, 3, 4, 2, 3],
+    advancedBatting: {
+      ballsFaced: 610,
+      dotBallsPlayed: 380,
+      boundaryBalls: 83,
+      runsInPressure: 120,
+      ballsInPressure: 150,
+      powerplayRuns: 65,
+      middleOversRuns: 280,
+      deathOversRuns: 235,
+    },
+    advancedBowling: {
+      ballsBowled: 3840,
+      dotBallsBowled: 2150,
+      deathOversBowled: 245,
+      deathOversRuns: 1715,
+      powerplayWickets: 95,
+      middleOversWickets: 105,
+      deathOversWickets: 80,
+      matchTurningWickets: 42,
+      boundariesConceded: 410,
+    },
+    advancedFielding: {
+      catchAttempts: 45,
+      catchesTaken: 38,
+      runOutAttempts: 12,
+      directHits: 3,
+      runsSaved: 85,
+      groundFieldingActions: 140,
+      misfields: 10,
+    },
   },
   {
     id: '8',
     name: 'Shubman Gill',
     role: 'Batsman',
     avatar: 'SG',
+    image: '/images/players/shubman-gill.jpg',
     battingAverage: 52.1,
     strikeRate: 132.5,
     totalRuns: 4200,
@@ -170,12 +493,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 95,
     runsPerMatch: [89, 45, 123, 67, 34, 0, 98, 56, 78, 112],
     wicketsPerMatch: [0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+    advancedBatting: {
+      ballsFaced: 3170,
+      dotBallsPlayed: 950,
+      boundaryBalls: 498,
+      runsInPressure: 1260,
+      ballsInPressure: 1100,
+      powerplayRuns: 1680,
+      middleOversRuns: 1680,
+      deathOversRuns: 840,
+    },
+    advancedBowling: {
+      ballsBowled: 48,
+      dotBallsBowled: 12,
+      deathOversBowled: 0,
+      deathOversRuns: 0,
+      powerplayWickets: 0,
+      middleOversWickets: 2,
+      deathOversWickets: 0,
+      matchTurningWickets: 0,
+      boundariesConceded: 8,
+    },
+    advancedFielding: {
+      catchAttempts: 62,
+      catchesTaken: 55,
+      runOutAttempts: 18,
+      directHits: 6,
+      runsSaved: 125,
+      groundFieldingActions: 220,
+      misfields: 8,
+    },
   },
   {
     id: '9',
     name: 'Rishabh Pant',
     role: 'Wicket-Keeper',
     avatar: 'RP',
+    image: '/images/players/rishabh-pant.jpg',
     battingAverage: 38.7,
     strikeRate: 152.3,
     totalRuns: 3500,
@@ -189,12 +543,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 110,
     runsPerMatch: [45, 78, 23, 0, 156, 34, 89, 12, 67, 45],
     wicketsPerMatch: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    advancedBatting: {
+      ballsFaced: 2300,
+      dotBallsPlayed: 575,
+      boundaryBalls: 435,
+      runsInPressure: 1050,
+      ballsInPressure: 850,
+      powerplayRuns: 560,
+      middleOversRuns: 1400,
+      deathOversRuns: 1540,
+    },
+    advancedBowling: {
+      ballsBowled: 0,
+      dotBallsBowled: 0,
+      deathOversBowled: 0,
+      deathOversRuns: 0,
+      powerplayWickets: 0,
+      middleOversWickets: 0,
+      deathOversWickets: 0,
+      matchTurningWickets: 0,
+      boundariesConceded: 0,
+    },
+    advancedFielding: {
+      catchAttempts: 158,
+      catchesTaken: 145,
+      runOutAttempts: 35,
+      directHits: 12,
+      runsSaved: 165,
+      groundFieldingActions: 195,
+      misfields: 15,
+    },
   },
   {
     id: '10',
     name: 'Yuzvendra Chahal',
     role: 'Bowler',
     avatar: 'YC',
+    image: '/images/players/yuzvendra-chahal.jpg',
     battingAverage: 5.8,
     strikeRate: 78.5,
     totalRuns: 180,
@@ -208,12 +593,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 140,
     runsPerMatch: [2, 5, 0, 8, 1, 0, 3, 6, 2, 4],
     wicketsPerMatch: [2, 3, 1, 4, 2, 3, 1, 2, 4, 2],
+    advancedBatting: {
+      ballsFaced: 230,
+      dotBallsPlayed: 165,
+      boundaryBalls: 20,
+      runsInPressure: 35,
+      ballsInPressure: 60,
+      powerplayRuns: 18,
+      middleOversRuns: 95,
+      deathOversRuns: 67,
+    },
+    advancedBowling: {
+      ballsBowled: 3360,
+      dotBallsBowled: 1680,
+      deathOversBowled: 120,
+      deathOversRuns: 960,
+      powerplayWickets: 25,
+      middleOversWickets: 145,
+      deathOversWickets: 25,
+      matchTurningWickets: 35,
+      boundariesConceded: 385,
+    },
+    advancedFielding: {
+      catchAttempts: 35,
+      catchesTaken: 28,
+      runOutAttempts: 8,
+      directHits: 2,
+      runsSaved: 45,
+      groundFieldingActions: 85,
+      misfields: 12,
+    },
   },
   {
     id: '11',
     name: 'Suryakumar Yadav',
     role: 'Batsman',
     avatar: 'SY',
+    image: '/images/players/suryakumar-yadav.jpg',
     battingAverage: 42.8,
     strikeRate: 168.4,
     totalRuns: 3200,
@@ -227,12 +643,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 85,
     runsPerMatch: [67, 98, 45, 112, 23, 89, 0, 145, 34, 78],
     wicketsPerMatch: [0, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+    advancedBatting: {
+      ballsFaced: 1900,
+      dotBallsPlayed: 380,
+      boundaryBalls: 475,
+      runsInPressure: 960,
+      ballsInPressure: 720,
+      powerplayRuns: 320,
+      middleOversRuns: 1280,
+      deathOversRuns: 1600,
+    },
+    advancedBowling: {
+      ballsBowled: 72,
+      dotBallsBowled: 18,
+      deathOversBowled: 6,
+      deathOversRuns: 58,
+      powerplayWickets: 0,
+      middleOversWickets: 2,
+      deathOversWickets: 1,
+      matchTurningWickets: 0,
+      boundariesConceded: 12,
+    },
+    advancedFielding: {
+      catchAttempts: 55,
+      catchesTaken: 48,
+      runOutAttempts: 15,
+      directHits: 5,
+      runsSaved: 85,
+      groundFieldingActions: 165,
+      misfields: 10,
+    },
   },
   {
     id: '12',
     name: 'Shreyas Iyer',
     role: 'Batsman',
     avatar: 'SI',
+    image: '/images/players/shreyas-iyer.jpg',
     battingAverage: 40.2,
     strikeRate: 128.6,
     totalRuns: 4500,
@@ -246,12 +693,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 125,
     runsPerMatch: [56, 34, 89, 23, 78, 0, 67, 45, 112, 34],
     wicketsPerMatch: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+    advancedBatting: {
+      ballsFaced: 3500,
+      dotBallsPlayed: 1050,
+      boundaryBalls: 472,
+      runsInPressure: 1350,
+      ballsInPressure: 1200,
+      powerplayRuns: 450,
+      middleOversRuns: 2700,
+      deathOversRuns: 1350,
+    },
+    advancedBowling: {
+      ballsBowled: 96,
+      dotBallsBowled: 28,
+      deathOversBowled: 0,
+      deathOversRuns: 0,
+      powerplayWickets: 0,
+      middleOversWickets: 4,
+      deathOversWickets: 1,
+      matchTurningWickets: 1,
+      boundariesConceded: 15,
+    },
+    advancedFielding: {
+      catchAttempts: 70,
+      catchesTaken: 62,
+      runOutAttempts: 20,
+      directHits: 7,
+      runsSaved: 105,
+      groundFieldingActions: 195,
+      misfields: 12,
+    },
   },
   {
     id: '13',
     name: 'Kuldeep Yadav',
     role: 'Bowler',
     avatar: 'KY',
+    image: '/images/players/kuldeep-yadav.jpg',
     battingAverage: 7.2,
     strikeRate: 82.3,
     totalRuns: 220,
@@ -265,12 +743,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 120,
     runsPerMatch: [3, 8, 0, 5, 2, 12, 0, 4, 6, 2],
     wicketsPerMatch: [3, 2, 4, 1, 3, 2, 5, 1, 2, 3],
+    advancedBatting: {
+      ballsFaced: 268,
+      dotBallsPlayed: 188,
+      boundaryBalls: 28,
+      runsInPressure: 44,
+      ballsInPressure: 72,
+      powerplayRuns: 22,
+      middleOversRuns: 118,
+      deathOversRuns: 80,
+    },
+    advancedBowling: {
+      ballsBowled: 2880,
+      dotBallsBowled: 1584,
+      deathOversBowled: 85,
+      deathOversRuns: 595,
+      powerplayWickets: 28,
+      middleOversWickets: 118,
+      deathOversWickets: 19,
+      matchTurningWickets: 28,
+      boundariesConceded: 295,
+    },
+    advancedFielding: {
+      catchAttempts: 40,
+      catchesTaken: 32,
+      runOutAttempts: 10,
+      directHits: 3,
+      runsSaved: 52,
+      groundFieldingActions: 98,
+      misfields: 14,
+    },
   },
   {
     id: '14',
     name: 'Axar Patel',
     role: 'All-Rounder',
     avatar: 'AP',
+    image: '/images/players/axar-patel.jpg',
     battingAverage: 28.5,
     strikeRate: 118.2,
     totalRuns: 2800,
@@ -284,12 +793,43 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 110,
     runsPerMatch: [23, 45, 12, 67, 34, 0, 56, 28, 45, 34],
     wicketsPerMatch: [2, 1, 3, 2, 1, 2, 3, 1, 2, 2],
+    advancedBatting: {
+      ballsFaced: 2370,
+      dotBallsPlayed: 711,
+      boundaryBalls: 275,
+      runsInPressure: 840,
+      ballsInPressure: 780,
+      powerplayRuns: 280,
+      middleOversRuns: 1540,
+      deathOversRuns: 980,
+    },
+    advancedBowling: {
+      ballsBowled: 2640,
+      dotBallsBowled: 1188,
+      deathOversBowled: 95,
+      deathOversRuns: 760,
+      powerplayWickets: 22,
+      middleOversWickets: 102,
+      deathOversWickets: 21,
+      matchTurningWickets: 22,
+      boundariesConceded: 265,
+    },
+    advancedFielding: {
+      catchAttempts: 65,
+      catchesTaken: 58,
+      runOutAttempts: 18,
+      directHits: 6,
+      runsSaved: 78,
+      groundFieldingActions: 165,
+      misfields: 10,
+    },
   },
   {
     id: '15',
     name: 'Mohammed Siraj',
     role: 'Bowler',
     avatar: 'SI',
+    image: '/images/players/mohammed-siraj.jpg',
     battingAverage: 6.5,
     strikeRate: 75.8,
     totalRuns: 150,
@@ -303,6 +843,36 @@ export const initialPlayers: Player[] = [
     matchesPlayed: 95,
     runsPerMatch: [2, 6, 0, 4, 1, 8, 0, 3, 5, 2],
     wicketsPerMatch: [3, 4, 2, 5, 3, 1, 4, 2, 3, 4],
+    advancedBatting: {
+      ballsFaced: 198,
+      dotBallsPlayed: 139,
+      boundaryBalls: 16,
+      runsInPressure: 30,
+      ballsInPressure: 52,
+      powerplayRuns: 15,
+      middleOversRuns: 78,
+      deathOversRuns: 57,
+    },
+    advancedBowling: {
+      ballsBowled: 2280,
+      dotBallsBowled: 1368,
+      deathOversBowled: 165,
+      deathOversRuns: 1155,
+      powerplayWickets: 72,
+      middleOversWickets: 75,
+      deathOversWickets: 38,
+      matchTurningWickets: 28,
+      boundariesConceded: 295,
+    },
+    advancedFielding: {
+      catchAttempts: 28,
+      catchesTaken: 22,
+      runOutAttempts: 8,
+      directHits: 2,
+      runsSaved: 48,
+      groundFieldingActions: 95,
+      misfields: 8,
+    },
   },
 ];
 

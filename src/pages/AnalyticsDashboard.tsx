@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { usePlayers } from '@/context/PlayerContext';
 import { TopPerformersCard } from '@/components/analytics/TopPerformersCard';
@@ -37,10 +38,17 @@ const NEON_COLORS = {
 };
 
 const AnalyticsDashboard = () => {
-  const { players } = usePlayers();
+  const navigate = useNavigate();
+  const { players, setSelectedPlayer } = usePlayers();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortKey, setSortKey] = useState<string>('battingAverage');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+
+  // Handle player click - navigate to player panel
+  const handlePlayerClick = (player: typeof players[0]) => {
+    setSelectedPlayer(player);
+    navigate('/player');
+  };
 
   // Calculate team stats
   const teamStats = {
@@ -204,7 +212,7 @@ const AnalyticsDashboard = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Team Runs Trend */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold mb-4"style={{ color: NEON_COLORS.cyan }}>Team Runs Trend</h3>
+            <h3 className="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 from-0% via-purple-500 via-50% to-pink-500 to-100% bg-clip-text text-transparent">Team Runs Trend</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={teamRunsTrend}>
@@ -238,7 +246,7 @@ const AnalyticsDashboard = () => {
 
           {/* Team Wickets Trend */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-secondary mb-4">Team Wickets Trend</h3>
+            <h3 className="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 from-5% via-purple-500 via-45% to-pink-500 to-95% bg-clip-text text-transparent">Team Wickets Trend</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={teamWicketsTrend}>
@@ -263,7 +271,7 @@ const AnalyticsDashboard = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Team Composition Pie */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-accent mb-4">Team Composition</h3>
+            <h3 className="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 from-0% via-purple-500 via-55% to-pink-500 to-100% bg-clip-text text-transparent">Team Composition</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -320,7 +328,7 @@ const AnalyticsDashboard = () => {
 
           {/* Team Strength Radar */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-neon-cyan mb-4">Team Strength</h3>
+            <h3 className="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 from-0% via-purple-500 via-40% to-pink-500 to-100% bg-clip-text text-transparent">Team Strength</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={teamRadar}>
@@ -363,7 +371,7 @@ const AnalyticsDashboard = () => {
 
           {/* Top Contributor Chart */}
           <div className="neon-card">
-            <h3 className="font-display text-lg font-bold text-neon-cyan mb-4">Top Contributors</h3>
+            <h3 className="font-display text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 from-0% via-purple-500 via-45% to-pink-500 to-100% bg-clip-text text-transparent">Top Contributors</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={contributionData} layout="vertical">
@@ -386,104 +394,183 @@ const AnalyticsDashboard = () => {
         </div>
 
         {/* Full Player Table */}
-        <div className="neon-card">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-            <h3 className="font-display text-lg font-bold text-foreground">Full Player Database</h3>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="neon-card overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h3 className="font-display text-2xl font-bold bg-gradient-to-r from-cyan-400 from-0% via-purple-500 via-50% to-pink-500 to-100% bg-clip-text text-transparent">
+              Full Player Database
+            </h3>
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
               <Input
                 placeholder="Search players..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="neon-input pl-9"
+                className="neon-input pl-10 bg-background/50"
               />
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="neon-table">
+          <div className="overflow-x-auto rounded-xl border border-primary/20">
+            <table className="w-full border-collapse">
               <thead>
-                <tr>
-                  <th>Player</th>
-                  <th>Role</th>
+                <tr className="bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20">
+                  <th className="text-left px-4 py-4 text-sm font-bold text-primary uppercase tracking-wider border-b border-primary/30">Player</th>
+                  <th className="text-left px-4 py-4 text-sm font-bold text-secondary uppercase tracking-wider border-b border-primary/30">Role</th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-primary uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-primary/20 transition-colors"
                     onClick={() => toggleSort('battingAverage')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Avg <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-secondary uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-secondary/20 transition-colors"
                     onClick={() => toggleSort('strikeRate')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       SR <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-cyan-400 uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-cyan-500/20 transition-colors"
                     onClick={() => toggleSort('totalRuns')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Runs <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-accent uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-accent/20 transition-colors"
                     onClick={() => toggleSort('wickets')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Wkts <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-orange-400 uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-orange-500/20 transition-colors"
                     onClick={() => toggleSort('bowlingEconomy')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Econ <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-lime-400 uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-lime-500/20 transition-colors"
                     onClick={() => toggleSort('fitnessScore')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Fit <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                   <th
-                    className="cursor-pointer hover:text-foreground"
+                    className="text-center px-3 py-4 text-sm font-bold text-purple-400 uppercase tracking-wider border-b border-primary/30 cursor-pointer hover:bg-purple-500/20 transition-colors"
                     onClick={() => toggleSort('fieldingRating')}
                   >
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center justify-center gap-1">
                       Field <ArrowUpDown className="h-3 w-3" />
                     </span>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPlayers.map((player) => (
-                  <tr key={player.id} className="hover:bg-primary/5">
-                    <td className="font-medium">{player.name}</td>
-                    <td>
-                      <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary">
+                {filteredPlayers.map((player, index) => (
+                  <tr 
+                    key={player.id} 
+                    onClick={() => handlePlayerClick(player)}
+                    className={`
+                      cursor-pointer transition-all duration-300 
+                      hover:bg-primary/15 hover:shadow-[inset_0_0_30px_hsl(190_100%_50%/0.15)] hover:scale-[1.01]
+                      ${index % 2 === 0 ? 'bg-background/30' : 'bg-muted/10'}
+                      border-b border-primary/10 last:border-b-0
+                      group
+                    `}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        {player.image ? (
+                          <img 
+                            src={player.image} 
+                            alt={player.name}
+                            className="w-10 h-10 rounded-full object-cover border-2 border-primary/30 shadow-[0_0_10px_hsl(190_100%_50%/0.3)] group-hover:border-primary group-hover:shadow-[0_0_20px_hsl(190_100%_50%/0.5)] group-hover:scale-110 transition-all duration-300"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-sm font-bold text-primary group-hover:scale-110 transition-all duration-300">
+                            {player.avatar}
+                          </div>
+                        )}
+                        <span className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300">{player.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`
+                        text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-300
+                        ${player.role === 'Batsman' ? 'bg-primary/20 text-primary border border-primary/30 group-hover:bg-primary/30 group-hover:shadow-[0_0_10px_hsl(190_100%_50%/0.3)]' : ''}
+                        ${player.role === 'Bowler' ? 'bg-accent/20 text-accent border border-accent/30 group-hover:bg-accent/30 group-hover:shadow-[0_0_10px_hsl(330_90%_60%/0.3)]' : ''}
+                        ${player.role === 'All-Rounder' ? 'bg-secondary/20 text-secondary border border-secondary/30 group-hover:bg-secondary/30 group-hover:shadow-[0_0_10px_hsl(270_91%_65%/0.3)]' : ''}
+                        ${player.role === 'Wicket-Keeper' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 group-hover:bg-cyan-500/30 group-hover:shadow-[0_0_10px_hsl(185_94%_48%/0.3)]' : ''}
+                      `}>
                         {player.role}
                       </span>
                     </td>
-                    <td className="text-primary font-mono">{player.battingAverage.toFixed(1)}</td>
-                    <td className="text-secondary font-mono">{player.strikeRate.toFixed(1)}</td>
-                    <td className="font-mono">{player.totalRuns}</td>
-                    <td className="text-accent font-mono">{player.wickets}</td>
-                    <td className="font-mono">{player.bowlingEconomy.toFixed(1)}</td>
-                    <td className="text-neon-cyan font-mono">{player.fitnessScore}</td>
-                    <td className="text-neon-purple font-mono">{player.fieldingRating}</td>
+                    <td className="text-center px-3 py-3">
+                      <span className="font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded">
+                        {player.battingAverage.toFixed(1)}
+                      </span>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <span className="font-mono font-medium text-secondary">
+                        {player.strikeRate.toFixed(1)}
+                      </span>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <span className="font-mono font-bold text-cyan-400">
+                        {player.totalRuns.toLocaleString()}
+                      </span>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <span className={`font-mono font-bold ${player.wickets > 100 ? 'text-accent' : player.wickets > 0 ? 'text-accent/70' : 'text-muted-foreground'}`}>
+                        {player.wickets}
+                      </span>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <span className={`font-mono ${player.bowlingEconomy > 0 && player.bowlingEconomy < 5 ? 'text-lime-400 font-bold' : player.bowlingEconomy > 0 ? 'text-orange-400' : 'text-muted-foreground'}`}>
+                        {player.bowlingEconomy > 0 ? player.bowlingEconomy.toFixed(1) : '-'}
+                      </span>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-12 h-2 bg-muted/30 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-lime-500 to-lime-400 rounded-full transition-all"
+                            style={{ width: `${player.fitnessScore}%` }}
+                          />
+                        </div>
+                        <span className="font-mono text-sm text-lime-400">{player.fitnessScore}</span>
+                      </div>
+                    </td>
+                    <td className="text-center px-3 py-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-12 h-2 bg-muted/30 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all"
+                            style={{ width: `${player.fieldingRating}%` }}
+                          />
+                        </div>
+                        <span className="font-mono text-sm text-purple-400">{player.fieldingRating}</span>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          
+          {/* Table Footer */}
+          <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+            <span>Showing {filteredPlayers.length} of {players.length} players</span>
+            <span className="text-xs">Click column headers to sort</span>
           </div>
         </div>
       </div>

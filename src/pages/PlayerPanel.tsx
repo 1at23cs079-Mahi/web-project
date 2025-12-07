@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { usePlayers } from '@/context/PlayerContext';
 import { Player } from '@/data/players';
 import { NeonCircularProgress } from '@/components/ui/NeonCircularProgress';
-import { User, ChevronDown } from 'lucide-react';
+import AdvancedMetricsCard from '@/components/analytics/AdvancedMetricsCard';
+import { User, GitCompare } from 'lucide-react';
 import {
   BarChart,
   Bar,
@@ -31,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 const NEON_COLORS = {
   blue: 'hsl(190, 100%, 50%)',
@@ -41,6 +44,7 @@ const NEON_COLORS = {
 };
 
 const PlayerPanel = () => {
+  const navigate = useNavigate();
   const { players, selectedPlayer, setSelectedPlayer } = usePlayers();
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(
     selectedPlayer || players[0] || null
@@ -52,6 +56,10 @@ const PlayerPanel = () => {
       setCurrentPlayer(player);
       setSelectedPlayer(player);
     }
+  };
+
+  const handleCompareClick = () => {
+    navigate('/compare');
   };
 
   if (!currentPlayer) {
@@ -112,28 +120,93 @@ const PlayerPanel = () => {
             </div>
           </div>
 
-          <Select value={currentPlayer.id} onValueChange={handlePlayerChange}>
-            <SelectTrigger className="neon-input w-64">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-card border-primary/30">
-              {players.map((player) => (
-                <SelectItem key={player.id} value={player.id}>
-                  {player.name} - {player.role}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <Select value={currentPlayer.id} onValueChange={handlePlayerChange}>
+              <SelectTrigger className="neon-input w-72">
+                <div className="flex items-center gap-3">
+                  {players.find(p => p.id === currentPlayer.id)?.image ? (
+                    <img 
+                      src={players.find(p => p.id === currentPlayer.id)?.image} 
+                      alt=""
+                      className="w-8 h-8 rounded-full object-cover border border-primary/30"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold">
+                      {currentPlayer.avatar}
+                    </div>
+                  )}
+                  <span>{currentPlayer.name} - {currentPlayer.role}</span>
+                </div>
+              </SelectTrigger>
+              <SelectContent className="bg-card border-primary/30">
+                {players.map((player) => (
+                  <SelectItem key={player.id} value={player.id} className="py-2">
+                    <div className="flex items-center gap-3">
+                      {player.image ? (
+                        <img 
+                          src={player.image} 
+                          alt={player.name}
+                          className="w-8 h-8 rounded-full object-cover border border-primary/30"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold">
+                          {player.avatar}
+                        </div>
+                      )}
+                      <span>{player.name} - {player.role}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Compare Button - Navigates to Compare Page */}
+            <button
+              onClick={handleCompareClick}
+              className="flex items-center gap-2 px-5 py-3 rounded-lg transition-all duration-300 bg-muted/30 text-muted-foreground border border-muted/30 hover:border-secondary hover:text-secondary hover:bg-secondary/20 hover:shadow-[0_0_25px_hsl(270_91%_65%/0.5)] hover:scale-105 active:scale-95"
+            >
+              <GitCompare className="w-5 h-5" />
+              <span className="text-base font-medium">Compare</span>
+            </button>
+          </div>
         </div>
 
         {/* Player Info Card */}
         <div className="neon-card">
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/30 flex items-center justify-center font-display font-bold text-3xl text-primary animate-pulse-neon">
-              {currentPlayer.avatar}
-            </div>
+            {currentPlayer.image ? (
+              <div 
+                onClick={() => navigate('/analytics')}
+                className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-primary/50 shadow-[0_0_30px_hsl(190_100%_50%/0.4)] transition-all duration-300 hover:shadow-[0_0_50px_hsl(190_100%_50%/0.8)] hover:scale-110 hover:border-primary relative group cursor-pointer"
+              >
+                <img 
+                  src={currentPlayer.image} 
+                  alt={currentPlayer.name}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = `<div class="w-full h-full flex items-center justify-center font-display font-bold text-4xl text-primary bg-gradient-to-br from-primary/20 to-secondary/20">${currentPlayer.avatar}</div>`;
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-2">
+                  <span className="text-xs text-white font-medium">View Analytics</span>
+                </div>
+              </div>
+            ) : (
+              <div 
+                onClick={() => navigate('/analytics')}
+                className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary/30 flex items-center justify-center font-display font-bold text-4xl text-primary animate-pulse-neon shadow-[0_0_30px_hsl(190_100%_50%/0.3)] cursor-pointer hover:scale-110 hover:shadow-[0_0_50px_hsl(190_100%_50%/0.8)] hover:border-primary transition-all duration-300"
+              >
+                {currentPlayer.avatar}
+              </div>
+            )}
             <div className="text-center sm:text-left flex-1">
-              <h2 className="font-display text-3xl font-bold text-foreground">{currentPlayer.name}</h2>
+              <h2 
+                onClick={() => navigate('/analytics')}
+                className="font-display text-3xl font-bold text-foreground cursor-pointer hover:text-primary transition-all duration-300 hover:drop-shadow-[0_0_10px_hsl(190_100%_50%/0.8)]"
+              >
+                {currentPlayer.name}
+              </h2>
               <p className="text-secondary text-lg">{currentPlayer.role}</p>
               <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-3">
                 <span className="text-sm text-muted-foreground">
@@ -314,6 +387,11 @@ const PlayerPanel = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Advanced Pro-Level Metrics */}
+          <div className="lg:col-span-2">
+            <AdvancedMetricsCard player={currentPlayer} />
           </div>
 
           {/* Performance Trend */}
